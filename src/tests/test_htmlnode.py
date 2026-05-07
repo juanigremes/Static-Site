@@ -1,7 +1,6 @@
 import unittest
 
-from src.nodes.htmlnode import HTMLNode, LeafNode, ParentNode
-
+from src.logic.htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHtmlNode(unittest.TestCase):
     def test_h1_vacio_repr(self):
