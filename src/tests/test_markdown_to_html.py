@@ -41,7 +41,7 @@ This is another paragraph with _italic_ text and `code` here
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
             )
 
-    def test_lists(self):
+    def test_unordered_lists(self):
         md = """
 - This is a list
 - with
@@ -56,6 +56,23 @@ This is another paragraph with _italic_ text and `code` here
         self.assertEqual(
             html,
             "<div><ul><li>This is a list</li><li>with</li><li>3 items</li></ul><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+            )
+
+    def test_ordered_lists(self):
+        md = """
+1. This is a list
+2. with
+3. 3 items
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ol><li>This is a list</li><li>with</li><li>3 items</li></ol><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
             )
 
     def test_codeblock(self):
