@@ -90,3 +90,11 @@ def block_list_to_html_nodes(block, block_type):
         res.append(html_li)
 
     return res
+
+
+def extract_title(markdown):
+    partes = markdown.split('\n')
+    titulo = partes[0]
+    if heading_type(titulo) != 1:
+        raise Exception("there is no h1 header")
+    return titulo.strip('#').strip()

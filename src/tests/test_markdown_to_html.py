@@ -89,3 +89,22 @@ the **same** even with inline stuff
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
             )
+
+
+class TestExtractTitle(unittest.TestCase):
+
+    def test_extract_title_1(self):
+        expected = "Hello"
+        recieved = extract_title("# Hello")
+        self.assertEqual(recieved, expected)
+
+    def test_extract_title_2(self):
+        expected = "Hello"
+        recieved = extract_title("# Hello              \n lol")
+        self.assertEqual(recieved, expected)
+
+    def test_extract_title_3(self):
+        self.assertRaises(Exception, extract_title, "## Hello")
+
+    def test_extract_title_4(self):
+        self.assertRaises(Exception, extract_title, " Hello")
