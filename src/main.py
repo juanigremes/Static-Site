@@ -1,10 +1,29 @@
 import os
+from pathlib import Path
 import shutil
-from logic.markdown_to_html import generate_page
+from src.markdown_to_html import generate_page
 
 def main():
     copy_from_to("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+       
+    entries = os.listdir(dir_path_content)
+
+    for entry in entries:
+        entry_path = os.path.join(dir_path_content, entry)
+        dest_path = os.path.join(dest_dir_path, entry)
+        if os.path.isfile(entry_path):
+            generate_page(entry_path, template_path, Path(dest_path).with_suffix(".html"))
+        else:
+            generate_pages_recursive(entry_path, template_path, dest_path)
+
+    #generate_page("content/index.md", "template.html", "public/index.html")
+    #generate_page("content/blog/glorfindel/index.md", "template.html", "public/blog/glorfindel/index.html")
+    #generate_page("content/blog/tom/index.md", "template.html", "public/blog/tom/index.html")
+    #generate_page("content/blog/majesty/index.md", "template.html", "public/blog/majesty/index.html")
+    #generate_page("content/contact/index.md", "template.html", "public/contact/index.html")
 
 def copy_from_to(source, destination):
     if os.path.exists(source):

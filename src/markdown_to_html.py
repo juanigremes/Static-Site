@@ -1,8 +1,8 @@
-from logic.markdown_to_text_nodes import *
+from src.markdown_to_text_nodes import *
 import os
-from logic.textnode import *
-from logic.htmlnode import *
-from logic.blocks import *
+from src.textnode import *
+from src.htmlnode import *
+from src.blocks import *
 
 
 def generate_page(from_path, template_path, dest_path):
@@ -112,7 +112,7 @@ def block_list_to_html_nodes(block, block_type):
 
     for item in list_items:
         if block_type == BlockType.ORDERED_LIST:
-            item = item.split('.', 1)[1]
+            item = item.split('. ', 1)[1]
         else:
             item = item[2:]
         text_nodes = text_to_textnodes(item)

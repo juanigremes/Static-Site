@@ -1,5 +1,5 @@
 import unittest
-from src.logic.markdown_to_text_nodes import *
+from src.markdown_to_text_nodes import *
 
 class TestSplitNodes(unittest.TestCase):
     

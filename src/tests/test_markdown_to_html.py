@@ -1,5 +1,5 @@
 import unittest
-from src.logic.markdown_to_html import *
+from src.markdown_to_html import *
 
 class TestTextToHTML(unittest.TestCase):
 

@@ -1,6 +1,6 @@
-from logic.textnode import *
-from logic.htmlnode import *
-from logic.blocks import *
+from src.textnode import *
+from src.htmlnode import *
+from src.blocks import *
 import re
 
 

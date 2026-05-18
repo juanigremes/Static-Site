@@ -1,5 +1,5 @@
 import unittest
-from src.logic.textnode import *
+from src.textnode import *
 
 
 class TestTextNode(unittest.TestCase):
