@@ -4,9 +4,7 @@ from pathlib import Path
 import shutil
 from src.markdown_to_html import generate_page
 
-basepath = sys.argv[0]
-if basepath == '':
-    basepath = '/'
+basepath = sys.argv[1] if len(sys.argv) > 1 else '/'
 
 
 def main():
