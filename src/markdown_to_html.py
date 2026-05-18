@@ -5,7 +5,7 @@ from src.htmlnode import *
 from src.blocks import *
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
     with open(from_path, 'r') as from_file:
@@ -16,7 +16,7 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(markdown)
     html_string = markdown_to_html_node(markdown).to_html()
     
-    template = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
+    template = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string).replace("href=\"/", f"href=\"{basepath}").replace("src=\"/", f"src=\"{basepath}")
 
     direc = os.path.dirname(dest_path)
     if not os.path.exists(direc):

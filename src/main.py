@@ -1,13 +1,20 @@
+import sys
 import os
 from pathlib import Path
 import shutil
 from src.markdown_to_html import generate_page
 
-def main():
-    copy_from_to("static", "public")
-    generate_pages_recursive("content", "template.html", "public")
+basepath = sys.argv[0]
+if basepath == '':
+    basepath = '/'
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+
+def main():
+    global basepath
+    copy_from_to("static", "docs")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
        
     entries = os.listdir(dir_path_content)
 
@@ -15,15 +22,10 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         entry_path = os.path.join(dir_path_content, entry)
         dest_path = os.path.join(dest_dir_path, entry)
         if os.path.isfile(entry_path):
-            generate_page(entry_path, template_path, Path(dest_path).with_suffix(".html"))
+            generate_page(entry_path, template_path, Path(dest_path).with_suffix(".html"), basepath)
         else:
-            generate_pages_recursive(entry_path, template_path, dest_path)
+            generate_pages_recursive(entry_path, template_path, dest_path, basepath)
 
-    #generate_page("content/index.md", "template.html", "public/index.html")
-    #generate_page("content/blog/glorfindel/index.md", "template.html", "public/blog/glorfindel/index.html")
-    #generate_page("content/blog/tom/index.md", "template.html", "public/blog/tom/index.html")
-    #generate_page("content/blog/majesty/index.md", "template.html", "public/blog/majesty/index.html")
-    #generate_page("content/contact/index.md", "template.html", "public/contact/index.html")
 
 def copy_from_to(source, destination):
     if os.path.exists(source):
