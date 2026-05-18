@@ -1,7 +1,29 @@
-from src.logic.markdown_to_text_nodes import *
-from src.logic.textnode import *
-from src.logic.htmlnode import *
-from src.logic.blocks import *
+from logic.markdown_to_text_nodes import *
+import os
+from logic.textnode import *
+from logic.htmlnode import *
+from logic.blocks import *
+
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    
+    with open(from_path, 'r') as from_file:
+        markdown = from_file.read()
+    with open(template_path, 'r') as template_file:
+        template = template_file.read()
+
+    title = extract_title(markdown)
+    html_string = markdown_to_html_node(markdown).to_html()
+    
+    template = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
+
+    direc = os.path.dirname(dest_path)
+    if not os.path.exists(direc):
+        os.makedirs(direc)
+
+    with open(dest_path, 'w') as dest_file:
+        dest_file.write(template)
 
 
 
@@ -22,8 +44,15 @@ def markdown_to_html_node(markdown):
             contenido_en_html = block_list_to_html_nodes(bloque, tipo_del_bloque)
 
         else:
-            bloque = bloque.replace('\n', ' ')
-            contenido_en_text_nodes = text_to_textnodes(bloque)    
+            
+            bloque_limpio = bloque
+            if tipo_del_bloque == BlockType.HEADING:
+                bloque_limpio = bloque.strip().lstrip('#').strip()
+            elif tipo_del_bloque == BlockType.QUOTE:
+                bloque_limpio = bloque.strip().strip('>').strip()
+
+            bloque_limpio = bloque_limpio.replace('\n', ' ')
+            contenido_en_text_nodes = text_to_textnodes(bloque_limpio)    
                 
             contenido_en_html = []
             for t_node in contenido_en_text_nodes:
@@ -75,7 +104,7 @@ def text_node_to_html_node(text_node):
     elif text_node.text_type == TextType.LINK:
         return LeafNode("a", text_node.text, {"href": text_node.url})
     elif text_node.text_type == TextType.IMAGE:
-        return LeafNode("img", "", {"src": text_type.url, "alt":"alternative text"})
+        return LeafNode("img", "", {"src": text_node.url, "alt":"alternative text"})
 
 def block_list_to_html_nodes(block, block_type):
     res = []
@@ -83,10 +112,12 @@ def block_list_to_html_nodes(block, block_type):
 
     for item in list_items:
         if block_type == BlockType.ORDERED_LIST:
-            item = item[3:]
+            item = item.split('.', 1)[1]
         else:
             item = item[2:]
-        html_li = LeafNode("li", item)
+        text_nodes = text_to_textnodes(item)
+        children = [text_node_to_html_node(tn) for tn in text_nodes]
+        html_li = ParentNode("li", children)
         res.append(html_li)
 
     return res

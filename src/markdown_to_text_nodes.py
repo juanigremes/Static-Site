@@ -1,6 +1,6 @@
-from src.logic.textnode import *
-from src.logic.htmlnode import *
-from src.logic.blocks import *
+from logic.textnode import *
+from logic.htmlnode import *
+from logic.blocks import *
 import re
 
 
@@ -40,16 +40,15 @@ def split_nodes_delimeter(old_nodes, delimeter, text_type):
         if len(new_texts) % 2 == 0:
             raise Exception(f"invalid markdown sintax, only one delimeter:{delimeter} found")
         
-        text = True
+        text = False
         for new_t in new_texts:
+            text = not text
             if new_t == '':
-                break
+                continue
             if text:
                 res.append(TextNode(new_t, TextType.TEXT))
-                text = False
             else:
                 res.append(TextNode(new_t, text_type))
-                text = True
 
     return res
 

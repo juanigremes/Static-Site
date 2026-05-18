@@ -1,8 +1,10 @@
 import os
 import shutil
+from logic.markdown_to_html import generate_page
 
 def main():
     copy_from_to("static", "public")
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 def copy_from_to(source, destination):
     if os.path.exists(source):
@@ -37,6 +39,9 @@ def copy_all_directory(source, destination, depth):
 
     print(f"{tabs}end recursion ----------------------------------\n")
     return
+
+
+
 
 
 main()
